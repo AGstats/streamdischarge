@@ -17,7 +17,7 @@ df = pd.DataFrame(
    ]
 )
 
-edited_df = st.data_editor(df, num_rows="dynamic", use_container_width = True)
+edited_df = st.data_editor(df, num_rows="dynamic")
 
 # Declaration of variables
 x = edited_df["Distance Traversed"].values
