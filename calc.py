@@ -28,7 +28,7 @@ min_y = np.min(y)
 y = y - min_y
 
 # Calculate spline representation of the data
-tck = splrep(x, y)
+tck = splrep(x, y, per=1)
 
 # Generate points on the spline curve for a smoother line
 pointsPerMeter = 100
