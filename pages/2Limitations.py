@@ -40,5 +40,5 @@ st.markdown("""
 
 :star: Discharge computations are done using Mannings formula which gives good results but is highly sensitive to the coefficient value.  
 
-:star: Mannings equation works better for man-made channels/canals due to fair estimate of coefficient rather than natural streams due to high variability of bed conditions as mentioned earlier that makes them difficult for estimating coefficient.    
+:star: Mannings equation works better for man-made channels/canals due to fair estimate of coefficient rather than natural streams due to high variability of bed conditions as mentioned earlier that makes them difficult for estimating coefficient. We can overcome this limitation by calibrating Mannings coefficient of a stream in field using Current Meter data periodically.    
 """)

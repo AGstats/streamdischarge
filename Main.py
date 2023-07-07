@@ -93,20 +93,21 @@ if st.session_state.editmode is False and (st.session_state.fixeddf.shape[0] < 4
     )
     turnoneditmode()
 if st.session_state.b1visibility:
-    col3.button(":chart_with_upwards_trend: PLOT", on_click=turnoffeditmode)
+    col3.button(":chart_with_upwards_trend: **:green[PLOT]**", on_click=turnoffeditmode)
 
 if st.session_state.b2visibility:
-    col3.button(":keyboard: ENTER INPUTS", on_click=proceedfurther)
+    col3.button(":keyboard: **:green[ENTER INPUTS]**", on_click=proceedfurther)
 
 if st.session_state.b3visibility:
-    col3.button(":computer: COMPUTE", on_click=runcomputations)
+    col3.button(":computer: **:green[COMPUTE]**", on_click=runcomputations)
 
 if not st.session_state.editmode:
     col1.success("Click below Button to Restart the App")
-    col1.button(":pencil: REFRESH", on_click=clearsessionstate)
+    col1.button(":pencil: **:green[REFRESH]**", on_click=clearsessionstate)
 
 edited_df = st.session_state.fixeddf
-
+col1.divider()
+col1.info("**:violet[Stream Cross-Sectional Data Entry Table]**")
 st.session_state.edit_df = col1.data_editor(
     edited_df,
     num_rows="dynamic" if st.session_state.editmode else "fixed",
@@ -115,6 +116,7 @@ st.session_state.edit_df = col1.data_editor(
     hide_index=True,
     key="edited_table",
 )
+col1.divider()
 
 if st.session_state.editmode:
     col2.info(
@@ -163,7 +165,7 @@ else:
     x, y, x_additional, y_additional = interpolate_curve(edited_df, pointsPerMeter)
 
     if st.session_state.inputsentry:
-        fill_y = col2.number_input("**:violet[Enter the Depth of Water Column in Meters]**", value=0.00, min_value=0.00, max_value=max(y), step=0.10)
+        fill_y = col2.number_input("**:violet[Enter the Depth of Water Column in Meters]**", value=0.00, min_value=0.00, max_value=max(y), step=0.50)
         n = col2.number_input(
             "**:violet[Enter Mannings Coefficient]**", value=0.030, min_value=0.001, max_value=0.100, step=0.005, format="%.3f"
         )
@@ -172,7 +174,7 @@ else:
             value=1.00,
             min_value=0.01,
             max_value=999.00,
-            step=0.05,
+            step=0.10,
         )
 
     # Create a figure and axes object
@@ -239,6 +241,7 @@ else:
         q = area_3 * v
         
         with col3:
+            st.divider()
             col_1, col_2 = st.columns(spec=[0.50, 0.50], gap="small")
             with col_1:
                 st.write(f"""> Wetted Area  
@@ -252,12 +255,13 @@ else:
             with col_2:
                 st.write(f"""> Discharge  
                         **:green[{q:.2f}]** m³/Sec""")
+            st.divider()
     elif st.session_state.inputsentered:
         col2.error(":warning: Please Increase :arrow_up: Depth of Water Column field above :zero: for computations to run.")
     elif not st.session_state.inputsentry:
         col2.info(
             """ :keyboard: Please click on **:green[ENTER INPUTS]** button to proceed further. :dizzy:  
-            \n  :snowman: The Cross-Sectional data table is freezed now.     
+            \n  :snowman: The Cross-Sectional Data Entry Table is Freezed.     
             \n  :exclamation: If you want to edit cross-section data table again, click on **:green[REFRESH]** button to go back to edit mode. :pencil: """
         )
         col2.error(""" :white_check_mark: The Cross-Sectional plot gives fairly accurate representation in most of the cases.   

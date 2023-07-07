@@ -26,15 +26,17 @@ with st.sidebar:
                 :star2: **[Streamlit](https://streamlit.io)**  
                 """)
 
+st.success("""This App is freely available to all and is intended for Non-Commercial use to serve Engineers and Academic community  
+           \n  **Open Source for Better Science**""")
 
 st.info("""Please contact me for any Queries, Suggestions or to Report Bugs in the Application      
-        :construction_worker: **Name & Designation**       
+        \n  :construction_worker: **Name & Designation**       
         Ashok Guntu    
         Assistant Hydrologist  
-        :office: **Office**    
+        \n  :office: **Office**    
         District Data Center  
         Ground Water and Water Audit Department  
         NTR District  
-        :email: **Email**    
+        \n  :email: **Email**    
         ashokgwork@gmail.com 
 """)
