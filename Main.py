@@ -15,8 +15,8 @@ st.set_page_config(
 
 with st.sidebar:
     st.markdown("""**:violet[Need for this App]  :thought_balloon:**  
-        Stream Cross-Sections are irregular in shape and highly dynamic in nature which makes manual calculation of Wetted area and Wetted perimeter with fluctuation of water depth a tedious task.  
-        \n  This App is intended to Simplify this task by making use of Interpolation Techniques and Numerical Methods in Python.  
+        Stream Cross-Sections are irregular in shape and highly dynamic in nature which makes manual calculation of **Wetted Area** and **Wetted Perimeter** with fluctuation of water depth a tedious task.  
+        \n  This App is intended to Simplify this task by making use of Interpolation Techniques and Numerical Methods in Python and then calculate **Velocity** and **Discharge** of the stream for different input parameters.  
         """)
     st.divider()
     st.markdown("""Developed and Maintained by     
@@ -62,6 +62,11 @@ def turnoffeditmode():
     st.session_state.fixeddf = st.session_state.edit_df.copy()
     st.session_state.fixeddf.dropna(inplace=True)
 
+def turnoneditmode():
+    st.session_state.editmode = True
+    st.session_state.b1visibility = True
+    st.session_state.b2visibility = False
+
 def proceedfurther():
     st.session_state.inputsentry = True
     st.session_state.b2visibility = False
@@ -81,6 +86,12 @@ fill_y = None
 n = None
 s = None
 
+if st.session_state.editmode is False and (st.session_state.fixeddf.shape[0] < 4 or st.session_state.fixeddf["Distance"].duplicated().any()):
+    col2.error(
+        "Check and edit the Data Table, it either doesn't have minimum number of rows (**Atleast 4 Rows**) or has duplicates in **Distance** column",
+        icon="🚨"
+    )
+    turnoneditmode()
 if st.session_state.b1visibility:
     col3.button(":chart_with_upwards_trend: PLOT", on_click=turnoffeditmode)
 
@@ -91,6 +102,7 @@ if st.session_state.b3visibility:
     col3.button(":computer: COMPUTE", on_click=runcomputations)
 
 if not st.session_state.editmode:
+    col1.success("Click below Button to Restart the App")
     col1.button(":pencil: REFRESH", on_click=clearsessionstate)
 
 edited_df = st.session_state.fixeddf
