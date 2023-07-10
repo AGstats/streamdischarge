@@ -13,6 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
 with st.sidebar:
     st.markdown("""**:violet[Need for this App]  :thought_balloon:**  
         Stream Cross-Sections are irregular in shape and highly dynamic in nature which makes manual calculation of **Wetted Area** and **Wetted Perimeter** with fluctuation of water depth a tedious task.  
@@ -45,6 +46,7 @@ if "inputsentered" not in st.session_state:
             {"Distance": 20.0, "Elevation": 100.00},
         ]
     )
+    st.session_state.dflog = pd.DataFrame(columns=["Depth of Water", "Mannings Coefficient","Longitudinal Slope","Wetted Area","Wetted Perimeter","Velocity","Discharge"])
     st.session_state.fixeddf= st.session_state.df.copy()
     st.session_state.edit_df= st.session_state.df.copy()
     st.session_state.editmode = True
@@ -54,6 +56,8 @@ if "inputsentered" not in st.session_state:
     st.session_state.b4visibility = False
     st.session_state.inputsentry = False
     st.session_state.inputsentered = False
+    st.session_state.loggingresults = False
+    st.session_state.b5visibility = False
 
 def turnoffeditmode():
     st.session_state.editmode = False
@@ -75,12 +79,26 @@ def proceedfurther():
 def runcomputations():
     st.session_state.inputsentered = True
     st.session_state.b3visibility = False
+    st.session_state.b4visibility = True
+
+def logresults():
+    if fill_y > 0.001:
+        st.session_state.dflog.loc[len(st.session_state.dflog)] = [fill_y,n,s,area_3, length, v, q]
+        st.session_state.loggingresults = True
+        st.session_state.b5visibility = True
+    else:
+        col3.error(":warning: Please Increase :arrow_up: Depth of Water Column field above :zero: for computations to run.")
 
 def clearsessionstate():
     st.cache_data.clear()
     # Delete all the items in Session state
     for key in st.session_state.keys():
         del st.session_state[key]
+
+@st.cache_data
+def convert_df_to_csv(df):
+  # IMPORTANT: Cache the conversion to prevent computation on every rerun
+  return df.to_csv().encode('utf-8')
 
 fill_y = None
 n = None
@@ -105,6 +123,15 @@ if not st.session_state.editmode:
     col1.success("Click below Button to Restart the App")
     col1.button(":pencil: **:green[REFRESH]**", on_click=clearsessionstate)
 
+if st.session_state.b4visibility:
+    col3.button(":inbox_tray: **:green[Log Result]**", on_click=logresults)
+
+if st.session_state.b5visibility:
+    col3.download_button(label=":file_folder: **:green[Download Results]**",
+                         data=convert_df_to_csv(st.session_state.dflog),
+                         file_name='Results.csv',
+                         mime='text/csv', on_click= clearsessionstate)
+
 edited_df = st.session_state.fixeddf
 col1.divider()
 col1.info("**:violet[Stream Cross-Sectional Data Entry Table]**")
@@ -117,6 +144,14 @@ st.session_state.edit_df = col1.data_editor(
     key="edited_table",
 )
 col1.divider()
+
+with col1.expander(""" **:green[Version 2.0: Major Upgrade!]** :mega:  \n Tap to see Whats New!"""):
+    st.markdown("""
+        \n **:date: 10/07/2023**  \n I'm happy to announce Version 2.0 :smile: 
+        \n **:zap: Here's Whats New**  \n Now you can log your results using different combinations of input parameters and then download them as CSV file.
+        \n **🎉Courtesy**  \n This feature update is made based on feedback provided by Sri. TS Sharma, DGWO and Sri. K Siva Prasad AE of our Department.
+        \n **:date: 07/07/2023**  \n After testing internally, Released Version 1.0 to limited audience for Feedback :mag:       
+    """)
 
 if st.session_state.editmode:
     col2.info(
@@ -274,3 +309,5 @@ else:
         )
         col2.success("""Refer this website for Mannings Coefficient  
                      [Click Here](https://www.fsl.orst.edu/geowater/FX3/help/8_Hydraulic_Reference/Mannings_n_Tables.htm)""")
+    if st.session_state.loggingresults:
+        col2.dataframe(st.session_state.dflog)    
