@@ -13,7 +13,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-
 with st.sidebar:
     st.markdown("""**:violet[Need for this App]  :thought_balloon:**  
         Stream Cross-Sections are irregular in shape and highly dynamic in nature which makes manual calculation of **Wetted Area** and **Wetted Perimeter** with fluctuation of water depth a tedious task.  
@@ -114,26 +113,33 @@ if st.session_state.b1visibility:
     col3.button(":chart_with_upwards_trend: **:green[PLOT]**", on_click=turnoffeditmode)
 
 if st.session_state.b2visibility:
-    col3.button(":keyboard: **:green[ENTER INPUTS]**", on_click=proceedfurther)
+    col3.button(":keyboard: **:green[INPUT]**", on_click=proceedfurther)
 
 if st.session_state.b3visibility:
     col3.button(":computer: **:green[COMPUTE]**", on_click=runcomputations)
 
 if not st.session_state.editmode:
-    col1.success("Click below Button to Restart the App")
-    col1.button(":pencil: **:green[REFRESH]**", on_click=clearsessionstate)
+    col1.success("Click below :arrow_down: Button to Restart the App")
+    col1.button(":pencil: **:green[REFRESH]**",on_click=clearsessionstate)
+    col1.divider()
 
 if st.session_state.b4visibility:
-    col3.button(":inbox_tray: **:green[Log Result]**", on_click=logresults)
+    with col3:
+        col_1, col_2 = st.columns(spec=[0.40, 0.60], gap="small")
+        with col_1:
+            col_1.button(":inbox_tray: **:green[SAVE]**", help="Save Displayed Data",on_click=logresults)
 
 if st.session_state.b5visibility:
-    col3.download_button(label=":file_folder: **:green[Download Results]**",
-                         data=convert_df_to_csv(st.session_state.dflog),
-                         file_name='Results.csv',
-                         mime='text/csv', on_click= clearsessionstate)
+    with col_2:
+        col_2.download_button(label=":file_folder: **:green[DOWNLOAD]**",
+                            data=convert_df_to_csv(st.session_state.dflog),
+                            file_name='Results.csv',
+                            mime='text/csv', help="Download the Saved Data as CSV file",on_click= clearsessionstate)
+
+col3.divider()
 
 edited_df = st.session_state.fixeddf
-col1.divider()
+
 col1.info("**:violet[Stream Cross-Sectional Data Entry Table]**")
 st.session_state.edit_df = col1.data_editor(
     edited_df,
@@ -145,13 +151,15 @@ st.session_state.edit_df = col1.data_editor(
 )
 col1.divider()
 
-with col1.expander(""" **:green[Version 2.0: Major Upgrade!]** :mega:  \n Tap to see Whats New!"""):
+with col1.expander(""" **:green[Version 2.1: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
     st.markdown("""
+        \n **:date: 11/07/2023**  \n Released Version 2.1 with subtle changes to User Interface
         \n **:date: 10/07/2023**  \n I'm happy to announce Version 2.0 :smile: 
         \n **:zap: Here's Whats New**  \n Now you can log your results using different combinations of input parameters and then download them as CSV file.
         \n **🎉Courtesy**  \n This feature update is made based on feedback provided by Sri. TS Sharma, DGWO and Sri. K Siva Prasad AE of our Department.
         \n **:date: 07/07/2023**  \n After testing internally, Released Version 1.0 to limited audience for Feedback :mag:       
     """)
+
 
 if st.session_state.editmode:
     col2.info(
@@ -276,28 +284,27 @@ else:
         q = area_3 * v
         
         with col3:
-            st.divider()
-            col_1, col_2 = st.columns(spec=[0.50, 0.50], gap="small")
+            col_1, col_2, col_3, col_4 = st.columns(spec=[0.20, 0.20, 0.20, 0.20], gap="small")
             with col_1:
-                st.write(f"""> Wetted Area  
+                st.write(f"""> Area  
                         **:green[{area_3:.2f}]** m²""")
             with col_2:
+                st.write(f"""> Perimeter    
+                        **:green[{length:.2f}]** m""")
+            with col_3:
                 st.write(f"""> Velocity    
                         **:green[{v:.2f}]** m/Sec""")
-            with col_1:
-                st.write(f"""> Wetted Perimeter    
-                        **:green[{length:.2f}]** m""")
-            with col_2:
+            with col_4:
                 st.write(f"""> Discharge  
                         **:green[{q:.2f}]** m³/Sec""")
-            st.divider()
+
     elif st.session_state.inputsentered:
         col2.error(":warning: Please Increase :arrow_up: Depth of Water Column field above :zero: for computations to run.")
     elif not st.session_state.inputsentry:
         col2.info(
-            """ :keyboard: Please click on **:green[ENTER INPUTS]** button to proceed further. :dizzy:  
+            """ :keyboard: Click on **:green[INPUT]** button to Enter Input Parameters.  
             \n  :snowman: The Cross-Sectional Data Entry Table is Freezed.     
-            \n  :exclamation: If you want to edit cross-section data table again, click on **:green[REFRESH]** button to go back to edit mode. :pencil: """
+            \n  :exclamation: Click on **:green[REFRESH]** button to go back to edit mode. :pencil: """
         )
         col2.error(""" :white_check_mark: The Cross-Sectional plot gives fairly accurate representation in most of the cases.   
                    \n  🚨 But in some cases (Refer Limitations page) the plot gives inaccurate representation of the data.  
@@ -309,5 +316,8 @@ else:
         )
         col2.success("""Refer this website for Mannings Coefficient  
                      [Click Here](https://www.fsl.orst.edu/geowater/FX3/help/8_Hydraulic_Reference/Mannings_n_Tables.htm)""")
+    
     if st.session_state.loggingresults:
-        col2.dataframe(st.session_state.dflog)    
+        col2.divider()
+        col2.dataframe(st.session_state.dflog)
+ 

@@ -36,9 +36,9 @@ st.markdown("""
 
 :star: The curve is fitted for the cross-sectional data using piece wise interpolation (cubic polynomial by default) and gives fairly accurate representation in most of the cases but rarely the curve may give inaccurate representation due to lack of data points or due to alteration from steep fall to gentle fall in elevations.    
 
-:star: The Depth of the Water Column is from the deepest point and ideally the sensor measuring the water column depth needs to be positioned above the deepest point of cross-section but that may not be true in field for some streams.  
-
-:star: Discharge computations are done using Mannings formula which gives good results but is highly sensitive to the coefficient value.  
+:star: The Depth of the Water Column is from the deepest point and ideally the sensor measuring the water column depth needs to be positioned above the deepest point of cross-section but that may not be true in field for some streams. It is also assumed that the water surface level is uniform across the cross-section which is the ideal case.  
+           
+:star: Discharge computations are done using Mannings formula which gives good results but is highly sensitive to selection of the value for Mannings coefficient.  
 
 :star: Mannings equation works better for man-made channels/canals due to fair estimate of coefficient rather than natural streams due to high variability of bed conditions as mentioned earlier that makes them difficult for estimating coefficient. We can overcome this limitation by calibrating Mannings coefficient of a stream in field using Current Meter data periodically.    
 """)
