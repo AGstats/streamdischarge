@@ -284,17 +284,15 @@ else:
         q = area_3 * v
         
         with col3:
-            col_1, col_2, col_3, col_4 = st.columns(spec=[0.20, 0.20, 0.20, 0.20], gap="small")
+            col_1, col_2 = st.columns(spec=[0.50, 0.50], gap="large")
             with col_1:
-                st.write(f"""> Area  
+                st.write(f"""> Wetted Perimeter    
+                        **:green[{length:.2f}]** m""")
+                st.write(f"""> Wetted Area  
                         **:green[{area_3:.2f}]** m²""")
             with col_2:
-                st.write(f"""> Perimeter    
-                        **:green[{length:.2f}]** m""")
-            with col_3:
                 st.write(f"""> Velocity    
                         **:green[{v:.2f}]** m/Sec""")
-            with col_4:
                 st.write(f"""> Discharge  
                         **:green[{q:.2f}]** m³/Sec""")
 
