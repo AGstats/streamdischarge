@@ -151,9 +151,10 @@ st.session_state.edit_df = col1.data_editor(
 )
 col1.divider()
 
-with col1.expander(""" **:green[Version 2.1: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
+with col1.expander(""" **:green[Version 2.2: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
     st.markdown("""
-        \n **:date: 11/07/2023**  \n Released Version 2.1 with subtle changes to User Interface
+        \n **:date: 12/07/2023**  \n Released Version 2.2 with Performance Improvements and Code Refactoring  
+        \n **:date: 11/07/2023**  \n Released Version 2.1 with subtle changes to User Interface  
         \n **:date: 10/07/2023**  \n I'm happy to announce Version 2.0 :smile: 
         \n **:zap: Here's Whats New**  \n Now you can log your results using different combinations of input parameters and then download them as CSV file.
         \n **🎉Courtesy**  \n This feature update is made based on feedback provided by Sri. TS Sharma, DGWO and Sri. K Siva Prasad AE of our Department.
@@ -258,28 +259,26 @@ else:
             # Calculate area above the curve
             area_3 = area_2 - area_1
 
-            total_distance = 0.00
-            # Combine x and y coordinates into a single array
-            coordinates = np.column_stack((x_filter, y_filter))
-            # Iterate over the sequential coordinates
-            for i in range(len(coordinates) - 1):
-                # Calculate the distance between consecutive points
-                if (
-                    int((coordinates[i + 1][0] - coordinates[i][0]) * pointsPerMeter)
-                    <= pointsPerMeter
-                ):
-                    distance = euclidean(coordinates[i], coordinates[i + 1])
-                    total_distance += distance
-                else:
-                    print(f"Interval disrupted at {coordinates[i][0]}")
-            return total_distance, area_1, area_2, area_3
+            # Calculate the difference between consecutive x and y values
+            dx = np.diff(x_filter)
+            dy = np.diff(y_filter)
+
+            # Filter out Non-Consecutive dx values
+            filtered_index = np.where(dx <= (1 / (pointsPerMeter - 1)))[0]
+            dx_filtered = dx[filtered_index]
+            dy_filtered = dy[filtered_index]
+
+            # Calculate the Euclidean distance
+            length = np.sum(np.sqrt(dx_filtered**2 + dy_filtered**2))
+
+            return length, area_3
 
         # Filter the coordinates based on the fill_y condition
         filtered_indices = np.where(y_additional <= fill_y)[0]
         x_filter = x_additional[filtered_indices]
         y_filter = y_additional[filtered_indices]
 
-        length, area_1, area_2, area_3 = calculate_total_distance(x_filter, y_filter)
+        length, area_3 = calculate_total_distance(x_filter, y_filter)
         v = (1 / n) * ((area_3 / length) ** (2 / 3)) * ((s / 1000) ** (1 / 2))
         q = area_3 * v
         
