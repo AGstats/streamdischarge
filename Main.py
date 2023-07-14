@@ -151,9 +151,10 @@ st.session_state.edit_df = col1.data_editor(
 )
 col1.divider()
 
-with col1.expander(""" **:green[Version 2.2: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
+with col1.expander(""" **:green[Version 2.3: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
     st.markdown("""
-        \n **:date: 12/07/2023**  \n Released Version 2.2 with Performance Improvements and Code Refactoring  
+        \n **:date: 14/07/2023**  \n Released Version 2.3 with updated Documentation Page.   
+        \n **:date: 12/07/2023**  \n Released Version 2.2 with Performance Improvements and Code Refactoring    
         \n **:date: 11/07/2023**  \n Released Version 2.1 with subtle changes to User Interface  
         \n **:date: 10/07/2023**  \n I'm happy to announce Version 2.0 :smile: 
         \n **:zap: Here's Whats New**  \n Now you can log your results using different combinations of input parameters and then download them as CSV file.
