@@ -284,7 +284,7 @@ else:
         q = area_3 * v
         
         with col3:
-            col_1, col_2 = st.columns(spec=[0.50, 0.50], gap="large")
+            col_1, col_2 = st.columns(spec=[0.50, 0.50], gap="small")
             with col_1:
                 st.write(f"""> Wetted Perimeter    
                         **:green[{length:.2f}]** m""")

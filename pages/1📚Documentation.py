@@ -32,8 +32,8 @@ st.info('📚 This page explains the underlying logic and computations powering 
 st.markdown("""
             The objective of this App is to save time and labour involved in calculating stream cross-sectional 
             properties thereby arriving velocity and discharge of a stream. 
-            This App simplifies this task and gives reasonable accurate results in couple of minutes which otherwise takes hours to arrive results manually.
-            This App is designed to be self explanatory by giving suitable instructions in every step. so, Please read those instructions atleast during your initial use.
+            This App simplifies this task and gives reasonably accurate results in couple of minutes which otherwise takes hours to arrive manually.
+            This App is designed to be self explanatory by giving suitable instructions in every step. So, please read those instructions atleast during your initial use.
 
             **:red[Problem Statement] :lock:**
             
@@ -41,7 +41,7 @@ st.markdown("""
             
             :star: It can be measured every day in field by profiling the cross-section and using current meter for velocity. But this needs a dedicated guaging station which may not be feasible for every stream flow check point due to costs involved. 
             
-            :star: In order to reduce the man power and infrastructure that is needed for dedicated stream guage stations, Sensors can be installed to assess depth of flow at a particular stream cross-section that transmit the data at regular intervals. But depth of flow is only first step in arriving stream discharge.
+            :star: In order to reduce the man power and infrastructure that is needed for dedicated stream guage stations, Sensors can be installed to assess depth of flow at a particular stream cross-section. But depth of flow is only first step in arriving stream discharge.
             
             :star: Stream cross-sectional properties of wetted area and wetted perimeter that vary with depth of water flow are required for calculation of stream discharge using Mannings equation. 
             
@@ -53,7 +53,7 @@ st.markdown("""
             
             :star: This web app is designed using streamlit which is a popular python library for creating web apps using just python. Streamlit components render HTML, CSS and Javacript to the web page under the hood. So, I just used python code all the way in creating this web app. 
             
-            :star: To make this App not only with just user friendly interface but also be transparent in showing how calculations are performed in the background so that users can proceed with much confidence, here are 5 important aspects of how this App works in the backend.
+            :star: To make this transparent in showing how calculations are performed in the background so that users can proceed with much confidence, here are 5 important aspects of how this App works in the backend.
 
             :one: Fitting a curve to the control points which are the relative elevations across respective cross-sectional distances from bank. As the stream cross-section doesn't fit into any single curve equation, Piece wise interpolation is used in fitting curve to the control points using SciPy library. It's just like how smoothing in excel graphs work but this app defines the underlying smoothing algorithm that provides more options to fit the curve.
 
