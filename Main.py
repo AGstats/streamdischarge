@@ -103,9 +103,10 @@ fill_y = None
 n = None
 s = None
 
-if st.session_state.editmode is False and (st.session_state.fixeddf.shape[0] < 4 or st.session_state.fixeddf["Distance"].duplicated().any()):
+if st.session_state.editmode is False and (st.session_state.fixeddf.shape[0] < 4 or st.session_state.fixeddf["Distance"].duplicated().any() or st.session_state.fixeddf["Distance"].max()>10000):
     col2.error(
-        "Check and edit the Data Table, it either doesn't have minimum number of rows (**Atleast 4 Rows**) or has duplicates in **Distance** column",
+        """Check and edit the Data Table, it either doesn't have minimum number of rows (**Atleast 4 Rows**) or has duplicates in **Distance** column  
+        \n **Note:** Max Distance of cross-section allowed is 10000 meters :no_entry_sign:""",
         icon="🚨"
     )
     turnoneditmode()
@@ -151,8 +152,9 @@ st.session_state.edit_df = col1.data_editor(
 )
 col1.divider()
 
-with col1.expander(""" **:green[Version 2.3: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
+with col1.expander(""" **:green[Version 2.4: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
     st.markdown("""
+        \n **:date: 17/07/2023**  \n Released Version 2.4 with maximum value limitation to Distance column and minor UI changes.
         \n **:date: 14/07/2023**  \n Released Version 2.3 with updated Documentation Page.   
         \n **:date: 12/07/2023**  \n Released Version 2.2 with Performance Improvements and Code Refactoring    
         \n **:date: 11/07/2023**  \n Released Version 2.1 with subtle changes to User Interface  
@@ -165,20 +167,15 @@ with col1.expander(""" **:green[Version 2.3: Minor Upgrade!]** :mega:  \n Tap to
 
 if st.session_state.editmode:
     col2.info(
-        """ :keyboard: The table displayed here is a dynamic table with pre-populated cross-section data.  
+        """ :keyboard: The table displayed here is editable with pre-populated cross-sectional data  
+        **(In Meters)**    
         \n  :star: Please fill the table and then click on **:green[PLOT]** button to plot the cross-section. :chart_with_upwards_trend:
         \n  :star: The rows are dynamic and can be added based on requirement using :heavy_plus_sign: icon at the bottom.    
         \n  :star: Alternatively data can be copied from excel or other external sources and be pasted into this table for more ease. :sparkles:  
         \n  :star: Make sure that there are no duplicates in distance column and atleast :four: rows of data is entered.  
         \n  :star: If you just want to explore the App, then feel free to go ahead :dash: with the sample data for a quick overview of the App. :rocket:  
     """)
-elif edited_df.shape[0] < 4 or edited_df["Distance"].duplicated().any():
-    col2.error(
-        "Check the Data Table, it either doesn't have minimum number of rows (**Atleast 4 Rows**) or has duplicates in **Distance** column",
-        icon="🚨",
-    )
 else:
-
     @st.cache_data
     def interpolate_curve(edited_df, pointsPerMeter=100):
         # Declaration of variables
