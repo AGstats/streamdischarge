@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.interpolate import splrep, splev
 import scipy.integrate as spi
-from scipy.spatial.distance import euclidean
 
 st.set_page_config(
     page_title="SF Discharge Main",
@@ -44,10 +43,10 @@ if "inputsentered" not in st.session_state:
             {"Distance": 15.0, "Elevation": 98.00},
             {"Distance": 20.0, "Elevation": 100.00},
         ]
-    )
-    st.session_state.dflog = pd.DataFrame(columns=["Depth of Water", "Mannings Coefficient","Longitudinal Slope","Wetted Area","Wetted Perimeter","Velocity","Discharge"])
+    )  
     st.session_state.fixeddf= st.session_state.df.copy()
     st.session_state.edit_df= st.session_state.df.copy()
+    st.session_state.dflog = pd.DataFrame(columns=["Depth of Water", "Mannings Coefficient","Longitudinal Slope","Wetted Area","Wetted Perimeter","Velocity","Discharge"])
     st.session_state.editmode = True
     st.session_state.b1visibility = True
     st.session_state.b2visibility = False
@@ -59,16 +58,18 @@ if "inputsentered" not in st.session_state:
     st.session_state.b5visibility = False
 
 def turnoffeditmode():
-    st.session_state.editmode = False
-    st.session_state.b1visibility = False
-    st.session_state.b2visibility = True
-    st.session_state.fixeddf = st.session_state.edit_df.copy()
-    st.session_state.fixeddf.dropna(inplace=True)
-
-def turnoneditmode():
-    st.session_state.editmode = True
-    st.session_state.b1visibility = True
-    st.session_state.b2visibility = False
+    if st.session_state.edit_df.shape[0] < 4 or st.session_state.edit_df["Distance"].duplicated().any() or st.session_state.edit_df["Distance"].max()>10000:
+        col2.error(
+            """Check and edit the Data Table, it either doesn't have minimum number of rows (**Atleast 4 Rows**) or has duplicates in **Distance** column  
+            \n **Note:** Max Distance of cross-section allowed is 10000 meters :no_entry_sign:""",
+            icon="🚨"
+        )
+    else:
+        st.session_state.editmode = False
+        st.session_state.b1visibility = False
+        st.session_state.b2visibility = True
+        st.session_state.fixeddf = st.session_state.edit_df.copy()
+        st.session_state.fixeddf.dropna(inplace=True)
 
 def proceedfurther():
     st.session_state.inputsentry = True
@@ -103,13 +104,6 @@ fill_y = None
 n = None
 s = None
 
-if st.session_state.editmode is False and (st.session_state.fixeddf.shape[0] < 4 or st.session_state.fixeddf["Distance"].duplicated().any() or st.session_state.fixeddf["Distance"].max()>10000):
-    col2.error(
-        """Check and edit the Data Table, it either doesn't have minimum number of rows (**Atleast 4 Rows**) or has duplicates in **Distance** column  
-        \n **Note:** Max Distance of cross-section allowed is 10000 meters :no_entry_sign:""",
-        icon="🚨"
-    )
-    turnoneditmode()
 if st.session_state.b1visibility:
     col3.button(":chart_with_upwards_trend: **:green[PLOT]**", on_click=turnoffeditmode)
 
@@ -139,17 +133,17 @@ if st.session_state.b5visibility:
 
 col3.divider()
 
-edited_df = st.session_state.fixeddf
+st.session_state.df = st.session_state.fixeddf
 
 col1.info("**:violet[Stream Cross-Sectional Data Entry Table]**")
 st.session_state.edit_df = col1.data_editor(
-    edited_df,
+    st.session_state.df,
     num_rows="dynamic" if st.session_state.editmode else "fixed",
     disabled=False if st.session_state.editmode else True,
     use_container_width=True,
     hide_index=True,
-    key="edited_table",
 )
+
 col1.divider()
 
 with col1.expander(""" **:green[Version 2.4: Minor Upgrade!]** :mega:  \n Tap to see Whats New!"""):
@@ -176,6 +170,7 @@ if st.session_state.editmode:
         \n  :star: If you just want to explore the App, then feel free to go ahead :dash: with the sample data for a quick overview of the App. :rocket:  
     """)
 else:
+    edited_df = st.session_state.fixeddf
     @st.cache_data
     def interpolate_curve(edited_df, pointsPerMeter=100):
         # Declaration of variables
